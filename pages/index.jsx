@@ -1,18 +1,23 @@
-import { getProviders } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Head from 'next/head'
-import Header from '../components/Header'
 
-export const getServerSideProps = async () => {
-  const providers = await getProviders()
+import Header from '../components/Header'
+import Hero from '../components/Hero'
+import Slider from '../components/Slider'
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context)
 
   return {
     props: {
-      providers,
+      session,
     },
   }
 }
 
-export default function Home({ providers }) {
+export default function Home() {
+  const { data: session } = useSession()
+
   return (
     <div>
       <Head>
@@ -21,7 +26,12 @@ export default function Home({ providers }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header providers={providers} />
+      <Header />
+      {!session ? <Hero /> : (
+        <main>
+          <Slider />
+        </main>
+      )}
     </div>
   )
 }
