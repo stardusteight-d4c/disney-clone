@@ -4,18 +4,59 @@ import Head from 'next/head'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Slider from '../components/Slider'
+import Brands from '../components/Brands'
+import MoviesCollection from '../components/MoviesCollection'
+import ShowsCollection from '../components/ShowsCollection'
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
 
+  // NextJS getServerSideProps() with multiple fetch requests
+  const [
+    popularMoviesRes,
+    popularShowsRes,
+    top_ratedMoviesRes,
+    top_ratedShowsRes,
+  ] = await Promise.all([
+    fetch(
+      `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=pt-BR&page=1`
+    ),
+    fetch(
+      `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.TMDB_API_KEY}&language=pt-BR&page=1`
+    ),
+    fetch(
+      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.TMDB_API_KEY}&language=pt-BR&page=1`
+    ),
+    fetch(
+      `https://api.themoviedb.org/3/tv/top_rated?api_key=${process.env.TMDB_API_KEY}&language=pt-BR&page=1`
+    ),
+  ])
+
+  const [popularMovies, popularShows, top_ratedMovies, top_ratedShows] =
+    await Promise.all([
+      popularMoviesRes.json(),
+      popularShowsRes.json(),
+      top_ratedMoviesRes.json(),
+      top_ratedShowsRes.json(),
+    ])
+
   return {
     props: {
       session,
+      popularMovies: popularMovies.results,
+      popularShows: popularShows.results,
+      top_ratedMovies: top_ratedMovies.results,
+      top_ratedShows: top_ratedShows.results,
     },
   }
 }
 
-export default function Home() {
+export default function Home({
+  popularMovies,
+  popularShows,
+  top_ratedMovies,
+  top_ratedShows,
+}) {
   const { data: session } = useSession()
 
   return (
@@ -27,9 +68,23 @@ export default function Home() {
       </Head>
 
       <Header />
-      {!session ? <Hero /> : (
-        <main>
+      {!session ? (
+        <Hero />
+      ) : (
+        <main className="relative min-h-screen after:bg-home after:bg-center after:bg-cover after:bg-no-repeat after:bg-fixed after:absolute after:inset-0 after:z-[-1]">
           <Slider />
+          <Brands />
+
+          <div className='relative w-screen overflow-x-hidden'>
+            <MoviesCollection results={popularMovies} title="Filmes Populares" />
+            <ShowsCollection results={popularShows} title="Seriados Famosos" />
+            <MoviesCollection
+              results={top_ratedMovies}
+              title="Filmes mais votados"
+            />
+            <ShowsCollection results={top_ratedShows} title="Séries mais votadas" />
+            <div className="absolute rounded-l-[40%] top-[74px] -right-8 overflow-x-hidden bg-gradient-to-l to-transparent from-[#1e1f2c] via-[#1e1f2ce1] h-[82%] w-[10%]" />
+          </div>
         </main>
       )}
     </div>

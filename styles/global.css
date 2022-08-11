@@ -4,7 +4,11 @@
 
 html,
 body {
-  @apply font-montserrat antialiased scroll-smooth transition-all bg-[#040714] text-[#f9f9f9];
+  @apply font-montserrat antialiased scroll-smooth transition-all;
+}
+
+body {
+  @apply bg-[#040714] text-[#f9f9f9] overflow-x-hidden;
 }
 
 @layer components {
@@ -17,6 +21,16 @@ body {
   }
 
   .brand {
-    @apply flex relative w-52 h-32 sm:w-64 sm:h-36 border-[3px] border-[#f9f9f9] border-opacity-10 rounded-lg cursor-pointer shadow-xl overflow-hidden  hover:border-opacity-80 hover:shadow-2xl transform hover:scale-105 transition duration-300;
+    @apply flex relative w-52 h-32 sm:w-64 sm:h-36 border-[3px] border-[#f9f9f9] border-opacity-10 rounded-lg cursor-pointer shadow-xl overflow-hidden hover:border-opacity-80 hover:shadow-2xl transform hover:scale-105 transition duration-300;
   }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  hight: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 20px;
 }

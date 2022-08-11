@@ -5,11 +5,15 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    extend: {
+      backgroundImage: {
+        home: "url('/images/background.png')",
+      },
+    },
     fontFamily: {
       sans: ['ui-sans-serif', 'system-ui'],
       montserrat: ['Montserrat'],
     },
-    extend: {},
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 }
