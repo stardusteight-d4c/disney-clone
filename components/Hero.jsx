@@ -25,7 +25,7 @@ const Hero = () => {
             objectFit="contain"
           />
           <button className="bg-blue-600 uppercase text-xl tracking-wide font-extrabold py-4 px-6 w-full rounded hover:bg-[#0485ee]">
-            Adquira os três
+            Adquira já!
           </button>
           <p className="text-xs text-center ">
             Obtenha acesso ao Hulu, Disney+ e ESPN com 10% de desconto em uma

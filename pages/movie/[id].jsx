@@ -52,7 +52,7 @@ export default function Movie({ result }) {
       {status == 'loading' ? (
         <span>Loading...</span>
       ) : (
-        <section className="relative z-50 overflow-y-hidden md:overflow-y-visible">
+        <section className="relative z-50 overflow-x-hidden md:overflow-y-visible">
           <div className="relative min-h-[calc(100vh-72px)]">
             <Image
               src={
@@ -108,7 +108,7 @@ export default function Movie({ result }) {
                 index + 1 < array.length ? genre.name + ', ' : genre.name
               )}{' '}
             </p>
-            <h4 className="max-w-4xl text-base md:text-lg">
+            <h4 className="max-w-4xl text-base line-clamp-[10] md:line-clamp-none md:text-lg">
               {result.overview}
             </h4>
           </div>
@@ -119,7 +119,7 @@ export default function Movie({ result }) {
             <div className="absolute inset-0 z-50 w-screen h-screen md:-top-[75px] bg-[#040714] opacity-60" />
           )}
           <div
-            className={`absolute top-3 md:-top-8 inset-x-[7%] md:inset-x-[13%] rounded overflow-hidden transition duration-1000 ${
+            className={`absolute top-3 md:-top-8 inset-x-[7%] md:inset-x-[13%] rounded overflow-x-hidden transition duration-1000 ${
               showPlayer ? 'opacity-100 z-[55]' : 'opacity-0'
             }`}
           >
@@ -132,7 +132,7 @@ export default function Movie({ result }) {
                 <XIcon className="h-5" />
               </div>
             </div>
-            <div className="relative pt-[56.25%] md:pt-[46.25%]">
+            <div className="relative pt-[56.25%] md:pt-[50.25%]">
               <ReactPlayer
                 url={`https://www.youtube.com/watch?v=${result.videos?.results[index]?.key}`}
                 width="100%"

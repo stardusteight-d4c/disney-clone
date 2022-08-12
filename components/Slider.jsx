@@ -5,7 +5,7 @@ import { Carousel } from 'react-responsive-carousel'
 
 const Slider = () => {
   return (
-    <section className="relative mx-auto mt-4 shadow-2xl max-w-screen-2xl">
+    <section className="relative mx-auto mt-0 shadow-2xl max-w-screen-2xl">
       <div />
       <Carousel
         autoPlay

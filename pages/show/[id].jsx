@@ -51,7 +51,7 @@ export default function Show({ result }) {
       </Head>
 
       <Header />
-      <section className="relative z-50 overflow-y-hidden md:overflow-y-visible">
+      <section className="relative z-50 md:overflow-y-visible">
         <div className="relative min-h-[calc(100vh-72px)]">
           <Image
             src={
