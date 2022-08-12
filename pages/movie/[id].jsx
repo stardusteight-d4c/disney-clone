@@ -7,11 +7,11 @@ import Header from '../../components/Header'
 import Image from 'next/image'
 import { PlusIcon, XIcon } from '@heroicons/react/solid'
 import ReactPlayer from 'react-player'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 
 export const getServerSideProps = async (context) => {
   const { id } = context.query
-  
+
   const request = await fetch(
     `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=pt-BR&append_to_response=videos`
   ).then((response) => response.json())
@@ -29,7 +29,7 @@ export default function Movie({ result }) {
   const router = useRouter()
 
   const BASE_URL = 'https://image.tmdb.org/t/p/original/'
-  
+
   useEffect(() => {
     if (status == 'unauthenticated') {
       router.push('/')
@@ -38,9 +38,10 @@ export default function Movie({ result }) {
 
   const index = result.videos.results.findIndex(
     (element) => element.type === 'Trailer'
-    )
-    
-    return (
+  )
+
+  if (status == 'loading') return <span>Loading...</span>
+  return (
     <>
       <Head>
         <title>{result.title || result.original_title}</title>
@@ -49,10 +50,8 @@ export default function Movie({ result }) {
       </Head>
 
       <Header />
-      {status == 'loading' ? (
-        <span>Loading...</span>
-      ) : (
-        <section className="relative z-50 overflow-x-hidden md:overflow-y-visible">
+      {status == 'authenticated' && (
+        <section className="relative z-50 overflow-y-hidden sm:overflow-y-visible">
           <div className="relative min-h-[calc(100vh-72px)]">
             <Image
               src={
@@ -93,7 +92,7 @@ export default function Movie({ result }) {
                 </span>
               </button>
 
-              <div className="flex items-center justify-center border-2 border-white rounded-full cursor-pointer w-11 h-11 bg-black/60">
+              <div className="flex items-center justify-center border-2 border-white rounded-full cursor-pointer z w-11 h-11 bg-black/60">
                 <PlusIcon className="h-6" />
               </div>
               <div className="flex items-center justify-center border-2 border-white rounded-full cursor-pointer w-11 h-11 bg-black/60">
@@ -108,7 +107,7 @@ export default function Movie({ result }) {
                 index + 1 < array.length ? genre.name + ', ' : genre.name
               )}{' '}
             </p>
-            <h4 className="max-w-4xl text-base line-clamp-[10] md:line-clamp-none md:text-lg">
+            <h4 className="max-w-4xl text-base line-clamp-[5] md:line-clamp-none md:text-lg">
               {result.overview}
             </h4>
           </div>
@@ -119,8 +118,8 @@ export default function Movie({ result }) {
             <div className="absolute inset-0 z-50 w-screen h-screen md:-top-[75px] bg-[#040714] opacity-60" />
           )}
           <div
-            className={`absolute top-3 md:-top-8 inset-x-[7%] md:inset-x-[13%] rounded overflow-x-hidden transition duration-1000 ${
-              showPlayer ? 'opacity-100 z-[55]' : 'opacity-0'
+            className={`absolute top-3 sm:-top-8 inset-x-[7%] md:inset-x-[13%] rounded overflow-x-hidden transition duration-1000 ${
+              showPlayer ? 'opacity-100 z-50' : 'opacity-0'
             }`}
           >
             <div className="flex items-center justify-between bg-black text-[#f9f9f9] p-3.5">

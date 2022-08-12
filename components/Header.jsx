@@ -25,11 +25,13 @@ const Header = () => {
         className="cursor-pointer"
         onClick={() => router.push('/')}
       />
-      {status == "authenticated" && (
+      {status == 'authenticated' && (
         <div className="items-center hidden ml-10 space-x-6 md:flex">
           <a className="header-link group">
             <HomeIcon className="h-4" />
-            <span className="span">Início</span>
+            <span className="span" onClick={() => router.push('/')}>
+              Início
+            </span>
           </a>
           <a className="header-link group">
             <SearchIcon className="h-4" />
@@ -53,7 +55,7 @@ const Header = () => {
           </a>
         </div>
       )}
-      {status == "unauthenticated" ? (
+      {status == 'unauthenticated' ? (
         <button
           className="ml-auto uppercase border px-4 py-1.5 rounded font-medium tracking-wide hover:bg-white hover:text-black transition duration-200"
           onClick={() => signIn('google', { callbackUrl: '/' })}
