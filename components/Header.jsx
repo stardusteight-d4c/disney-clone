@@ -12,11 +12,11 @@ import {
 } from '@heroicons/react/solid'
 
 const Header = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
 
   return (
-    <header className="sticky bg-[#040714] top-0 z-[999] flex h-[72px] items-center px-10 md:px-12">
+    <header className="sticky bg-[#040714] top-0 z-30 flex h-[72px] items-center px-10 md:px-12">
       <Image
         src="/images/logo.svg"
         width={80}
@@ -25,7 +25,7 @@ const Header = () => {
         className="cursor-pointer"
         onClick={() => router.push('/')}
       />
-      {session && (
+      {status == "authenticated" && (
         <div className="items-center hidden ml-10 space-x-6 md:flex">
           <a className="header-link group">
             <HomeIcon className="h-4" />
@@ -53,7 +53,7 @@ const Header = () => {
           </a>
         </div>
       )}
-      {!session ? (
+      {status == "unauthenticated" ? (
         <button
           className="ml-auto uppercase border px-4 py-1.5 rounded font-medium tracking-wide hover:bg-white hover:text-black transition duration-200"
           onClick={() => signIn('google', { callbackUrl: '/' })}
@@ -62,7 +62,7 @@ const Header = () => {
         </button>
       ) : (
         <img
-          src={session.user.image}
+          src={session?.user?.image}
           alt=""
           className="object-cover w-12 h-12 ml-auto rounded-full cursor-pointer"
           onClick={signOut}
