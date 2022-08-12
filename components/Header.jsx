@@ -11,12 +11,12 @@ import {
   StarIcon,
 } from '@heroicons/react/solid'
 
-const Header = () => {
+const Header = ({ moviePage }) => {
   const { data: session, status } = useSession()
   const router = useRouter()
 
   return (
-    <header className="sticky bg-[#040714] top-0 z-30 flex h-[72px] items-center px-10 md:px-12">
+    <header className={`${!moviePage && 'sticky'} bg-[#040714] top-0 z-30 flex h-[72px] items-center px-10 md:px-12`}>
       <Image
         src="/images/logo.svg"
         width={80}

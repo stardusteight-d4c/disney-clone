@@ -49,7 +49,7 @@ export default function Movie({ result }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <Header moviePage />
       {status == 'authenticated' && (
         <section className="relative z-50 overflow-y-hidden md:overflow-y-visible">
           <div className="relative min-h-[calc(100vh-72px)]">
