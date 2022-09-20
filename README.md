@@ -198,3 +198,105 @@ export const getServerSideProps = async (context) => {
 
 *<i>developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all</i>
 
+<br />
+
+## Dynamic Routes
+
+Next.js has a `file-system` based router built on the concept of pages.
+
+When a file is added to the pages directory, it's automatically available as a route.
+
+The files inside the pages directory can be used to define most common patterns.
+
+The router will automatically route files named `index` to the root of the directory.
+
+ - `pages/index.jsx` → `/`
+ - `pages/blog/index.jsx` → `/blog`
+ 
+### Dynamic route segments
+
+To match a dynamic segment, you can use the bracket syntax. This allows you to match named parameters.
+
+ - `pages/movie/[id].jsx` → `/movie/:id`
+ - `pages/show/[id].jsx ` → `/show/:id`
+ 
+### Linking to dynamic paths
+
+You can also use `interpolation` to create the path, which is useful for dynamic route segments. For example, to show a movie in which its `id` was passed as the url `slug`.
+
+
+```jsx
+// components/MovieThumbnail.jsx
+
+// ...
+const MovieThumbnail = ({ result }) => {
+  const BASE_URL = 'https://image.tmdb.org/t/p/original/'
+  const router = useRouter()
+
+  return (
+    <div
+      className="flex min-w-[250px] min-h-[170px] md:min-w-[330px] md:min-h-[210px] rounded-lg overflow-hidden shadow-xl cursor-pointer border-[3px] border-[#f9f9f9] border-opacity-10  hover:border-opacity-80 hover:shadow-2xl transform hover:scale-105 transition duration-300"
+      onClick={() => router.push(`/movie/${result.id}`)}
+    >
+      <Image
+        src={
+          `${BASE_URL}${result.backdrop_path || result.poster_path}` ||
+          `${BASE_URL}${result.poster_path}`
+        }
+        width={330}
+        height={210}
+        objectFit="cover"
+        className="rounded-lg"
+      />
+    </div>
+  )
+}
+
+export default MovieThumbnail
+```
+
+And so `redirect` the user to the page of that movie where the fetch is done through the `id` of the movie via Server Side Rendering, passing the query context.
+
+```jsx
+// pages/movie/[id].jsx
+
+export const getServerSideProps = async (context) => {
+  const { id } = context.query
+
+  const request = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=pt-BR&append_to_response=videos`
+  ).then((response) => response.json())
+
+  return {
+    props: {
+      result: request,
+    },
+  }
+}
+
+export default function Movie({ result }) {
+  const { data: _, status } = useSession()
+  const [showPlayer, setShowPlayer] = useState(false)
+  const router = useRouter()
+
+  const BASE_URL = 'https://image.tmdb.org/t/p/original/'
+
+  useEffect(() => {
+    if (status == 'unauthenticated') {
+      router.push('/')
+    }
+  }, [router, status])
+
+  const index = result.videos.results.findIndex(
+    (element) => element.type === 'Trailer'
+  )
+
+  if (status == 'loading') return <span>Loading...</span>
+  return (
+  // ...
+  )
+}
+```
+
+*<i>nextjs.org/docs/routing/introduction</i>
+
